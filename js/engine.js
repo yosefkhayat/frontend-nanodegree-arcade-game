@@ -93,7 +93,6 @@ var Engine = (function(global) {
         allEnemies.forEach(function(enemy) {
             enemy.update(dt);
         });
-        player.update();
     }
 
     /* This function initially draws the "game level", it will then call
@@ -106,6 +105,8 @@ var Engine = (function(global) {
         /* This array holds the relative URL to the image used
          * for that particular row of the game level.
          */
+        
+        
         var rowImages = [
                 'images/water-block.png',   // Top row is water
                 'images/stone-block.png',   // Row 1 of 3 of stone
@@ -119,26 +120,44 @@ var Engine = (function(global) {
             row, col;
         
         // Before drawing, clear existing canvas
-        ctx.clearRect(0,0,canvas.width,canvas.height)
-
+        ctx.clearRect(0,0,canvas.width,canvas.height);
+        
+        //character choose
+        if(player.state!='game' ){
+            player.render();
+            rowImagesStart.map((elem,i)=>  ctx.drawImage(Resources.get(elem), i * 101,  5 * 83));
+            
+            ctx.font = 'bold 30px Arial';
+            ctx.textAlign = 'center';
+            ctx.fillStyle = "black";
+            ctx.fillText('Select Your character!', 253, 250);
+            ctx.font = '20px Arial';
+            ctx.fillText('Press Enter to Play', 252, 300);
+            
+        }  
+        
         /* Loop through the number of rows and columns we've defined above
          * and, using the rowImages array, draw the correct image for that
          * portion of the "grid"
          */
-        for (row = 0; row < numRows; row++) {
-            for (col = 0; col < numCols; col++) {
-                /* The drawImage function of the canvas' context element
-                 * requires 3 parameters: the image to draw, the x coordinate
-                 * to start drawing and the y coordinate to start drawing.
-                 * We're using our Resources helpers to refer to our images
-                 * so that we get the benefits of caching these images, since
-                 * we're using them over and over.
-                 */
-                ctx.drawImage(Resources.get(rowImages[row]), col * 101, row * 83);
+        else{
+            for (row = 0; row < numRows; row++) {
+                for (col = 0; col < numCols; col++) {
+                    /* The drawImage function of the canvas' context element
+                     * requires 3 parameters: the image to draw, the x coordinate
+                     * to start drawing and the y coordinate to start drawing.
+                     * We're using our Resources helpers to refer to our images
+                     * so that we get the benefits of caching these images, since
+                     * we're using them over and over.
+                     */
+                    ctx.drawImage(Resources.get(rowImages[row]), col * 101, row * 83);
+                }
             }
+            renderEntities();
         }
+        
 
-        renderEntities();
+        
     }
 
     /* This function is called by the render function and is called on each game
@@ -152,8 +171,8 @@ var Engine = (function(global) {
         allEnemies.forEach(function(enemy) {
             enemy.render();
         });
-
         player.render();
+        
     }
 
     /* This function does nothing but it could have been a good place to
@@ -173,7 +192,13 @@ var Engine = (function(global) {
         'images/water-block.png',
         'images/grass-block.png',
         'images/enemy-bug.png',
-        'images/char-boy.png'
+        'images/char-boy.png',
+        'images/char-cat-girl.png',
+        'images/char-horn-girl.png',
+        'images/char-pink-girl.png',
+        'images/char-princess-girl.png',
+        'images/Selector.png',
+        'images/Heart.png'
     ]);
     Resources.onReady(init);
 
@@ -183,3 +208,4 @@ var Engine = (function(global) {
      */
     global.ctx = ctx;
 })(this);
+
